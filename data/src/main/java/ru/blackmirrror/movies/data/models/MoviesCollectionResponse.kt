@@ -24,7 +24,7 @@ data class MoviesCollectionResponse (
 
 data class MovieCollectionItemResponse (
 
-    @SerializedName("filmId"           ) var filmId           : Int?                 = null,
+    @SerializedName("filmId"           ) var filmId           : Int                 ,
     @SerializedName("nameRu"           ) var nameRu           : String?              = null,
     @SerializedName("nameEn"           ) var nameEn           : String?              = null,
     @SerializedName("year"             ) var year             : String?              = null,

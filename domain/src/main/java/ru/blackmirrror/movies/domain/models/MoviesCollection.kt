@@ -9,7 +9,7 @@ data class MoviesCollection (
 
 data class MovieCollectionItem (
 
-    var filmId           : Int?                 = null,
+    var filmId           : Int                 ,
     var nameRu           : String?              = null,
     var nameEn           : String?              = null,
     var year             : String?              = null,

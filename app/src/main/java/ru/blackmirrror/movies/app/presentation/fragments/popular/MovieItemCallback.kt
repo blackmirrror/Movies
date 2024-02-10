@@ -1,4 +1,4 @@
-package ru.blackmirrror.movies.app.presentation.fragments
+package ru.blackmirrror.movies.app.presentation.fragments.popular
 
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import ru.blackmirrror.movies.domain.models.MovieCollectionItem

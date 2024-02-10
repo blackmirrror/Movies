@@ -1,12 +1,12 @@
-package ru.blackmirrror.movies.app.presentation.fragments
+package ru.blackmirrror.movies.app.presentation.fragments.popular
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.blackmirrror.movies.R
 import ru.blackmirrror.movies.databinding.FragmentPopularBinding
 
 class PopularFragment : Fragment() {
@@ -31,6 +31,13 @@ class PopularFragment : Fragment() {
     private fun initRecycler() {
         moviesAdapter = MoviesAdapter()
         binding.rvMovies.adapter = moviesAdapter
+        moviesAdapter.onMovieItemLongClickListener = {
+
+        }
+        moviesAdapter.onMovieItemClickListener = {
+            val action = PopularFragmentDirections.actionPopularFragmentToMovieFragment(it.filmId)
+            findNavController().navigate(action)
+        }
     }
 
     private fun observeData() {

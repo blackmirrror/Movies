@@ -1,4 +1,4 @@
-package ru.blackmirrror.movies.app.presentation.fragments
+package ru.blackmirrror.movies.app.presentation.fragments.popular
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

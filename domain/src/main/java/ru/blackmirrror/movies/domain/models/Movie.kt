@@ -2,7 +2,7 @@ package ru.blackmirrror.movies.domain.models
 
 data class Movie (
 
-    var kinopoiskId                : Int?                 = null,
+    var kinopoiskId                : Int                 ,
     var nameRu                     : String?              = null,
     var nameEn                     : String?              = null,
     var posterUrl                  : String?              = null,

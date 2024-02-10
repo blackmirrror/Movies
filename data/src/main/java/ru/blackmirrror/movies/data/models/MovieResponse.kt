@@ -7,7 +7,7 @@ import ru.blackmirrror.movies.domain.models.Movie
 
 data class MovieResponse (
 
-    @SerializedName("kinopoiskId"                ) var kinopoiskId                : Int?                 = null,
+    @SerializedName("kinopoiskId"                ) var kinopoiskId                : Int                 ,
     @SerializedName("kinopoiskHDId"              ) var kinopoiskHDId              : String?              = null,
     @SerializedName("imdbId"                     ) var imdbId                     : String?              = null,
     @SerializedName("nameRu"                     ) var nameRu                     : String?              = null,
