@@ -23,6 +23,9 @@ class PopularViewModel(
     private val _error = MutableLiveData<LoadState>()
     val error: LiveData<LoadState> = _error
 
+    private val _loadingState = MutableLiveData<Boolean>()
+    val loadingState: LiveData<Boolean> = _loadingState
+
     init {
         getPopularMovies()
     }
@@ -30,12 +33,15 @@ class PopularViewModel(
     fun getPopularMovies() {
         viewModelScope.launch {
             try {
+                _loadingState.postValue(true)
                 val list = getPopularMoviesUseCase.execute()
                 _movies.postValue(list)
                 _error.postValue(LoadState.SUCCESS)
             } catch (e: Exception) {
                 _movies.postValue(null)
                 _error.postValue(LoadState.FAIL)
+            } finally {
+                _loadingState.postValue(false)
             }
         }
 
@@ -58,6 +64,7 @@ class PopularViewModel(
     fun searchMoviesByWord(word: String) {
         viewModelScope.launch {
             try {
+                _loadingState.postValue(true)
                 val list = searchMoviesUseCase.execute(word)
                 if (list?.isEmpty() == true)
                     _error.postValue(LoadState.NONE)
@@ -67,6 +74,8 @@ class PopularViewModel(
             } catch (e: Exception) {
                 _movies.postValue(null)
                 _error.postValue(LoadState.NONE)
+            } finally {
+                _loadingState.postValue(false)
             }
         }
     }

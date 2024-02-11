@@ -70,6 +70,13 @@ class PopularFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.loadingState.observe(viewLifecycleOwner) {
+            binding.pbLoading.visibility = when(it) {
+                true -> View.VISIBLE
+                else -> View.GONE
+            }
+        }
     }
 
     private fun handleError() {

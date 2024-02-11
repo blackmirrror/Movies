@@ -1,15 +1,14 @@
 package ru.blackmirrror.movies.data.repositories
 
-import android.util.Log
-import ru.blackmirrror.movies.data.api.NetworkState
-import ru.blackmirrror.movies.data.models.MoviesCollectionResponse
-import ru.blackmirrror.movies.data.remote.RemoteDataSource
 import ru.blackmirrror.movies.data.MovieResponse
+import ru.blackmirrror.movies.data.api.NetworkState
 import ru.blackmirrror.movies.data.local.MoviesDb
 import ru.blackmirrror.movies.data.local.entities.CountryEntity
 import ru.blackmirrror.movies.data.local.entities.GenreEntity
 import ru.blackmirrror.movies.data.local.entities.MovieEntity
+import ru.blackmirrror.movies.data.models.MoviesCollectionResponse
 import ru.blackmirrror.movies.data.models.MoviesSearchResponse
+import ru.blackmirrror.movies.data.remote.RemoteDataSource
 import ru.blackmirrror.movies.domain.models.Movie
 import ru.blackmirrror.movies.domain.models.MovieCollectionItem
 import ru.blackmirrror.movies.domain.models.MoviesCollection
@@ -60,7 +59,6 @@ class MoviesRepositoryImpl(
     override suspend fun searchMoviesByWord(word: String): MoviesSearch? {
         return when (val response = remoteDataSource.getMoviesByWord(word)) {
             is NetworkState.Success -> {
-                Log.d("ff", "searchMoviesByWord: ${response.data}")
                 MoviesSearchResponse.map(response.data)
             }
             is NetworkState.Error -> null
