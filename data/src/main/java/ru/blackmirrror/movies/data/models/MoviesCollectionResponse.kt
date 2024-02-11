@@ -5,6 +5,7 @@ import ru.blackmirrror.movies.data.CountryResponse
 import ru.blackmirrror.movies.data.GenreResponse
 import ru.blackmirrror.movies.domain.models.MovieCollectionItem
 import ru.blackmirrror.movies.domain.models.MoviesCollection
+import ru.blackmirrror.movies.domain.models.MoviesSearch
 
 data class MoviesCollectionResponse (
 
@@ -17,6 +18,22 @@ data class MoviesCollectionResponse (
             return MoviesCollection(
                 moviesCollectionResponse.pagesCount,
                 moviesCollectionResponse.films.map { MovieCollectionItemResponse.map(it) }
+            )
+        }
+    }
+}
+
+data class MoviesSearchResponse (
+
+    @SerializedName("total"      ) var total      : Int?             = null,
+    @SerializedName("totalCount" ) var totalCount : Int?             = null,
+    @SerializedName("items"      ) var items      : List<MovieCollectionItemResponse> = arrayListOf()
+
+) {
+    companion object {
+        fun map(moviesSearchResponse: MoviesSearchResponse): MoviesSearch {
+            return MoviesSearch(
+                moviesSearchResponse.items.map { MovieCollectionItemResponse.map(it) }
             )
         }
     }

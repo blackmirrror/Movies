@@ -8,7 +8,11 @@ import ru.blackmirrror.movies.app.presentation.fragments.popular.PopularViewMode
 val appModule = module {
 
     viewModel {
-        PopularViewModel(getPopularMoviesUseCase = get(), addMovieToFavoriteUseCase = get())
+        PopularViewModel(
+            getPopularMoviesUseCase = get(),
+            addMovieToFavoriteUseCase = get(),
+            searchMoviesUseCase = get()
+        )
     }
 
     viewModel {

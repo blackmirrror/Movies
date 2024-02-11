@@ -5,6 +5,7 @@ import ru.blackmirrror.movies.data.api.ApiService
 import ru.blackmirrror.movies.data.api.NetworkState
 import ru.blackmirrror.movies.data.models.MoviesCollectionResponse
 import ru.blackmirrror.movies.data.MovieResponse
+import ru.blackmirrror.movies.data.models.MoviesSearchResponse
 
 class RemoteDataSourceImpl(private val service: ApiService): RemoteDataSource {
     override suspend fun getPopularMovies(): NetworkState<MoviesCollectionResponse> {
@@ -13,6 +14,10 @@ class RemoteDataSourceImpl(private val service: ApiService): RemoteDataSource {
 
     override suspend fun getMovie(id: Int): NetworkState<MovieResponse> {
         return getNetworkState(service.getMovie(id))
+    }
+
+    override suspend fun getMoviesByWord(word: String): NetworkState<MoviesSearchResponse> {
+        return getNetworkState(service.getMoviesByKeyword(word))
     }
 
     private inline fun <reified T> getNetworkState(response: Response<T>): NetworkState<T> {

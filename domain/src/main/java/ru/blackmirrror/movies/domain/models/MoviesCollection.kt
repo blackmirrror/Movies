@@ -7,6 +7,12 @@ data class MoviesCollection (
 
 )
 
+data class MoviesSearch (
+
+    var items: List<MovieCollectionItem> = arrayListOf()
+
+)
+
 data class MovieCollectionItem (
 
     var filmId           : Int                 ,

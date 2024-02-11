@@ -3,17 +3,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".app.presentation.fragments.popular.PopularFragment">
+
+    <FrameLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <include
+            android:id="@+id/toolbar_title"
+            layout="@layout/layout_toolbar_title"
+            android:visibility="visible" />
+
+        <include
+            android:id="@+id/toolbar_search"
+            layout="@layout/layout_toolbar_search"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="4"
         tools:listitem="@layout/item_movie"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/fail_layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <include
+            android:id="@+id/layout_error"
+            layout="@layout/layout_error" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/none_layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <include
+            android:id="@+id/layout_none"
+            layout="@layout/layout_none" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

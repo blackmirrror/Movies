@@ -2,12 +2,11 @@ package ru.blackmirrror.movies.app.presentation.fragments.movie
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -16,7 +15,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.blackmirrror.movies.R
 import ru.blackmirrror.movies.app.presentation.utils.TextFormatter
 import ru.blackmirrror.movies.databinding.FragmentMovieBinding
 
@@ -24,6 +22,9 @@ class MovieFragment : Fragment() {
 
     private lateinit var binding: FragmentMovieBinding
     private val viewModel by viewModel<MovieViewModel>()
+
+    private var filmId: Int? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,14 +33,15 @@ class MovieFragment : Fragment() {
 
         getFilmId()
         observeMovie()
+        handleError()
 
         return binding.root
     }
 
     private fun getFilmId() {
-        val filmId = arguments?.getInt("film_id")
+        filmId = arguments?.getInt("film_id")
         if (filmId != null) {
-            viewModel.getMovie(filmId)
+            viewModel.getMovie(filmId!!)
         }
     }
 
@@ -57,7 +59,8 @@ class MovieFragment : Fragment() {
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
-            if (it) Toast.makeText(requireContext(), "Ошибка загрузки", Toast.LENGTH_SHORT).show()
+            if (it) binding.failLayoutContainer.visibility = View.VISIBLE
+            else binding.failLayoutContainer.visibility = View.GONE
         }
     }
 
@@ -77,6 +80,13 @@ class MovieFragment : Fragment() {
                 e.printStackTrace()
             }
             (imageView).setImageBitmap(bitmap as? Bitmap?)
+        }
+    }
+
+    private fun handleError() {
+        binding.layoutError.btnError.setOnClickListener {
+            if (filmId != null)
+                viewModel.getMovie(filmId!!)
         }
     }
 }

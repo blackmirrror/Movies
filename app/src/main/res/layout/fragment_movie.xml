@@ -44,4 +44,15 @@
         app:layout_constraintTop_toBottomOf="@id/tv_movie_genres"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Страны: бла бла бла"/>
+
+    <FrameLayout
+        android:id="@+id/fail_layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <include
+            android:id="@+id/layout_error"
+            layout="@layout/layout_error" />
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

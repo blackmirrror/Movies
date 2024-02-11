@@ -4,6 +4,7 @@ import org.koin.dsl.module
 import ru.blackmirrror.movies.domain.usecases.AddMovieToFavoriteUseCase
 import ru.blackmirrror.movies.domain.usecases.GetMovieUseCase
 import ru.blackmirrror.movies.domain.usecases.GetPopularMoviesUseCase
+import ru.blackmirrror.movies.domain.usecases.SearchMoviesUseCase
 
 val domainModule = module {
     factory {
@@ -16,5 +17,9 @@ val domainModule = module {
 
     factory {
         AddMovieToFavoriteUseCase(repository = get())
+    }
+
+    factory {
+        SearchMoviesUseCase(repository = get())
     }
 }
