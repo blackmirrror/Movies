@@ -19,14 +19,25 @@ class PopularViewModel(
     private val _movies = MutableLiveData<MoviesCollection?>()
     val movies: LiveData<MoviesCollection?> = _movies
 
+    private val _error = MutableLiveData<Boolean>()
+    val error: LiveData<Boolean> = _error
+
     init {
         getPopularMovies()
     }
 
     private fun getPopularMovies() {
         viewModelScope.launch {
-            _movies.postValue(getPopularMoviesUseCase.execute())
+            try {
+                val list = getPopularMoviesUseCase.execute()
+                _movies.postValue(list)
+                _error.postValue(false)
+            } catch (e: Exception) {
+                _movies.postValue(null)
+                _error.postValue(true)
+            }
         }
+
     }
 
     fun addMovieToFavorite(movie: MovieCollectionItem) {

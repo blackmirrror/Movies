@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -45,12 +46,18 @@ class MovieFragment : Fragment() {
     private fun observeMovie() {
         viewModel.movie.observe(viewLifecycleOwner) {
             with(binding) {
-                tvMovieTitle.text = it.nameRu
-                tvMovieDescription.text = it.description
-                tvMovieGenres.text = TextFormatter.formatGenres(it.genres.map { it.genre })
-                tvMovieCountries.text = TextFormatter.formatCountries(it.countries.map { it.country })
+                tvMovieTitle.text = it?.nameRu
+                tvMovieDescription.text = it?.description
+                tvMovieGenres.text = it?.genres?.map { it.genre }
+                    ?.let { it1 -> TextFormatter.formatGenres(it1) }
+                tvMovieCountries.text = it?.countries?.map { it.country }
+                    ?.let { it1 -> TextFormatter.formatCountries(it1) }
             }
-            it.posterUrl?.let { it1 -> loadImage(binding.ivMovieImage, it1) }
+            it?.posterUrl?.let { it1 -> loadImage(binding.ivMovieImage, it1) }
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            if (it) Toast.makeText(requireContext(), "Ошибка загрузки", Toast.LENGTH_SHORT).show()
         }
     }
 
