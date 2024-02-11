@@ -5,13 +5,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.blackmirrror.movies.data.api.ApiService
 
 object ApiFactory {
 
     private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/v2.2/"
-    private const val API_KEY = "5e2c6535-8ee4-40ae-bbee-756fc448d82b"
-    //private const val API_KEY = "e30ffed0-76ab-4dd6-b41f-4c9da2b2735b"
+    //private const val API_KEY = "5e2c6535-8ee4-40ae-bbee-756fc448d82b"
+    private const val API_KEY = "e30ffed0-76ab-4dd6-b41f-4c9da2b2735b"
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(makeLoggingInterceptor())

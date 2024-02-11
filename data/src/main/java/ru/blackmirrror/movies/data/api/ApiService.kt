@@ -4,9 +4,8 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.blackmirrror.movies.data.models.MoviesCollectionResponse
 import ru.blackmirrror.movies.data.MovieResponse
-import ru.blackmirrror.movies.data.models.MoviesSearchResponse
+import ru.blackmirrror.movies.data.models.MoviesCollectionResponse
 
 interface ApiService {
 
@@ -15,12 +14,6 @@ interface ApiService {
 
     @GET("films/top")
     suspend fun getPopularMovies(
-        @Query("type") type: String,
-        //@Query("page") page: Int
+        @Query("type") type: String
     ): Response<MoviesCollectionResponse>
-
-//    @GET("films")
-//    suspend fun getMoviesByKeyword(
-//        @Query("keyword") keyword: String
-//    ): Response<MoviesSearchResponse>
 }

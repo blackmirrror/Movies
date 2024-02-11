@@ -1,11 +1,13 @@
 package ru.blackmirrror.movies.app.presentation.fragments.main
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.transition.ChangeBounds
@@ -51,39 +53,26 @@ class MainFragment : Fragment() {
 
     private fun observeData() {
         viewModel.movies.observe(viewLifecycleOwner) {
-            if (it != null)
-                moviesAdapter.submitList(it)
-            else
-                moviesAdapter.submitList(arrayListOf())
+            moviesAdapter.submitList(it ?: arrayListOf())
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
-            when (it) {
-                LoadState.FAIL -> {
-                    binding.failLayoutContainer.visibility = View.VISIBLE
-                    binding.noneLayoutContainer.visibility = View.GONE
-                }
-                LoadState.NONE -> {
-                    binding.failLayoutContainer.visibility = View.GONE
-                    binding.noneLayoutContainer.visibility = View.VISIBLE
-                }
-                else -> {
-                    binding.failLayoutContainer.visibility = View.GONE
-                    binding.noneLayoutContainer.visibility = View.GONE
-                }
-            }
+            val failVisibility = if (it == LoadState.FAIL) View.VISIBLE else View.GONE
+            val noneVisibility = if (it == LoadState.NONE) View.VISIBLE else View.GONE
+
+            binding.failLayoutContainer.visibility = failVisibility
+            binding.noneLayoutContainer.visibility = noneVisibility
         }
 
         viewModel.loadingState.observe(viewLifecycleOwner) {
-            binding.pbLoading.visibility = when(it) {
-                true -> View.VISIBLE
-                else -> View.GONE
-            }
+            binding.pbLoading.visibility = if (it) View.VISIBLE else View.GONE
         }
 
         viewModel.mode.observe(viewLifecycleOwner) {
-            if (it) loadPopular()
-            else loadFavorite()
+            if (it) {
+                binding.toolbarTitle.tvToolbarTitle.text =
+                    getString(R.string.title_popular)
+            } else binding.toolbarTitle.tvToolbarTitle.text = getString(R.string.title_favorite)
             viewModel.loadNeedMovies()
         }
     }
@@ -98,12 +87,12 @@ class MainFragment : Fragment() {
         val transition = ChangeBounds()
         transition.duration = 1000
 
-        binding.toolbarTitle.ivToolbarTitle.setOnClickListener{
+        binding.toolbarTitle.ivToolbarTitle.setOnClickListener {
             TransitionManager.beginDelayedTransition(binding.toolbarContainer, transition)
             binding.toolbarTitle.root.visibility = View.GONE
             binding.toolbarSearch.root.visibility = View.VISIBLE
         }
-        binding.toolbarSearch.ivToolbarSearch.setOnClickListener{
+        binding.toolbarSearch.ivToolbarSearch.setOnClickListener {
             TransitionManager.beginDelayedTransition(binding.toolbarContainer, transition)
             closeEditToolbar()
             binding.noneLayoutContainer.visibility = View.GONE
@@ -112,7 +101,7 @@ class MainFragment : Fragment() {
     }
 
     private fun handleSearch() {
-        binding.toolbarSearch.etToolbarSearch.addTextChangedListener(object: TextWatcher {
+        binding.toolbarSearch.etToolbarSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -141,19 +130,53 @@ class MainFragment : Fragment() {
         binding.btnPopular.setOnClickListener {
             viewModel.changeMode(true)
             closeEditToolbar()
+            binding.btnPopular.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.deep_blue_500
+                )
+            )
+            binding.btnPopular.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            binding.btnFavorite.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.deep_blue_200
+                )
+            )
+            binding.btnFavorite.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.deep_blue_500
+                )
+            )
         }
         binding.btnFavorite.setOnClickListener {
             viewModel.changeMode(false)
             closeEditToolbar()
+            binding.btnFavorite.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.deep_blue_500
+                )
+            )
+            binding.btnFavorite.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.white
+                )
+            )
+            binding.btnPopular.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.deep_blue_200
+                )
+            )
+            binding.btnPopular.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.deep_blue_500
+                )
+            )
         }
-    }
-
-    private fun loadPopular() {
-        binding.toolbarTitle.tvToolbarTitle.text =
-            getString(R.string.title_popular)
-    }
-
-    private fun loadFavorite() {
-        binding.toolbarTitle.tvToolbarTitle.text = getString(R.string.title_favorite)
     }
 }
