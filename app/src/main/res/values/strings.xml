@@ -9,4 +9,7 @@
     <string name="search">Поиск</string>
     <string name="title_popular">Популярные</string>
     <string name="none_loading_btn">Не найдено</string>
+    <string name="item_description">Описание</string>
+    <string name="item_genres">Жанры: один, два</string>
+    <string name="item_countries">Страны: Россия, Россия</string>
 </resources>

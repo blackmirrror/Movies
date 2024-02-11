@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -34,6 +35,7 @@ class MovieFragment : Fragment() {
         getFilmId()
         observeMovie()
         handleError()
+        initBackButton()
 
         return binding.root
     }
@@ -68,6 +70,7 @@ class MovieFragment : Fragment() {
     private fun loadImage(imageView: ImageView, url: String) {
         GlobalScope.launch(Dispatchers.Main) {
             val bitmap = try {
+                binding.pbLoading.visibility = View.VISIBLE
                 withContext(Dispatchers.IO) {
                     Glide.with(imageView)
                         .asBitmap()
@@ -78,6 +81,8 @@ class MovieFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            } finally {
+                binding.pbLoading.visibility = View.GONE
             }
             (imageView).setImageBitmap(bitmap as? Bitmap?)
         }
@@ -87,6 +92,12 @@ class MovieFragment : Fragment() {
         binding.layoutError.btnError.setOnClickListener {
             if (filmId != null)
                 viewModel.getMovie(filmId!!)
+        }
+    }
+
+    private fun initBackButton() {
+        binding.ivBack.setOnClickListener{
+            findNavController().popBackStack()
         }
     }
 }
