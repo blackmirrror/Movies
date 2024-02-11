@@ -29,8 +29,9 @@
         android:layout_marginStart="16dp"
         android:maxLines="1"
         android:inputType="textCapSentences"
-        android:imeOptions="actionSearch"
+        android:imeOptions="actionDone"
         android:singleLine="true"
-        android:fontFamily="sans-serif-light"/>
+        android:fontFamily="sans-serif-light"
+        android:textCursorDrawable="@drawable/cursor_color"/>
 
 </androidx.appcompat.widget.Toolbar>

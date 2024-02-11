@@ -12,31 +12,21 @@ data class MovieEntity(
     @ColumnInfo(name = "nameRu") var nameRu: String? = null,
     @ColumnInfo(name = "nameEn") var nameEn: String? = null,
     @ColumnInfo(name = "year") var year: String? = null,
-//    @Relation(
-//        parentColumn = "filmId",
-//        entityColumn = "movieId"
-//    )
-//    var countries: List<CountryEntity> = arrayListOf(),
-//    @Relation(
-//        parentColumn = "filmId",
-//        entityColumn = "movieId"
-//    )
-//    var genres: List<GenreEntity> = arrayListOf(),
     @ColumnInfo(name = "posterUrl") var posterUrl: String? = null,
-    @ColumnInfo(name = "posterUrlPreview") var posterUrlPreview: String? = null
+    @ColumnInfo(name = "posterUrlPreview") var posterUrlPreview: String? = null,
+    @ColumnInfo(name = "isFavorite") var isFavorite: Boolean?= true
 ) {
-//    fun fromEntityToMovieCollectionItem(): MovieCollectionItem {
-//        return MovieCollectionItem(
-//            filmId,
-//            nameRu,
-//            nameEn,
-//            year,
-//            //countries.map { it.fromEntityToCountry() },
-//            //genres.map { it.fromEntityToGenre() },
-//            posterUrl,
-//            posterUrlPreview
-//        )
-//    }
+    fun fromEntityToMovieCollectionItem(): MovieCollectionItem {
+        return MovieCollectionItem(
+            filmId,
+            nameRu,
+            nameEn,
+            year,
+            posterUrl = posterUrl,
+            posterUrlPreview =  posterUrlPreview,
+            isFavorite = isFavorite
+        )
+    }
 
     companion object {
         fun fromMovieCollectionItemToEntity(movieCollectionItem: MovieCollectionItem): MovieEntity {
@@ -45,20 +35,9 @@ data class MovieEntity(
                 movieCollectionItem.nameRu,
                 movieCollectionItem.nameEn,
                 movieCollectionItem.year,
-//                movieCollectionItem.countries.map {
-//                    CountryEntity.fromCountryToEntity(
-//                        it,
-//                        movieCollectionItem.filmId
-//                    )
-//                },
-//                movieCollectionItem.genres.map {
-//                    GenreEntity.fromGenreToEntity(
-//                        it,
-//                        movieCollectionItem.filmId
-//                    )
-//                },
                 movieCollectionItem.posterUrl,
-                movieCollectionItem.posterUrlPreview
+                movieCollectionItem.posterUrlPreview,
+                movieCollectionItem.isFavorite
             )
         }
     }

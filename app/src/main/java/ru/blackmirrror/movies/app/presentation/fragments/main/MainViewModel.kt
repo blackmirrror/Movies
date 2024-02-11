@@ -1,21 +1,23 @@
-package ru.blackmirrror.movies.app.presentation.fragments.popular
+package ru.blackmirrror.movies.app.presentation.fragments.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.blackmirrror.movies.domain.models.MovieCollectionItem
-import ru.blackmirrror.movies.domain.usecases.AddMovieToFavoriteUseCase
-import ru.blackmirrror.movies.domain.usecases.GetPopularMoviesUseCase
+import ru.blackmirrror.movies.domain.usecases.AddMovieToDbUseCase
+import ru.blackmirrror.movies.domain.usecases.GetMoviesUseCase
 import ru.blackmirrror.movies.domain.usecases.SearchMoviesUseCase
 
-class PopularViewModel(
-    private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
-    private val addMovieToFavoriteUseCase: AddMovieToFavoriteUseCase,
+class MainViewModel(
+    private val getMoviesUseCase: GetMoviesUseCase,
+    private val addMovieToDbUseCase: AddMovieToDbUseCase,
     private val searchMoviesUseCase: SearchMoviesUseCase
 ) : ViewModel() {
+
+    private val _mode = MutableLiveData<Boolean>()
+    val mode: LiveData<Boolean> = _mode
 
     private val _movies = MutableLiveData<List<MovieCollectionItem>?>()
     val movies: LiveData<List<MovieCollectionItem>?> = _movies
@@ -27,14 +29,26 @@ class PopularViewModel(
     val loadingState: LiveData<Boolean> = _loadingState
 
     init {
+        _mode.postValue(true)
         getPopularMovies()
     }
 
-    fun getPopularMovies() {
+    fun changeMode(newMode: Boolean) {
+        _mode.postValue(newMode)
+    }
+
+    fun loadNeedMovies() {
+        if (_mode.value == true)
+            getPopularMovies()
+        else
+            getFavoriteMovies()
+    }
+
+    private fun getPopularMovies() {
         viewModelScope.launch {
             try {
                 _loadingState.postValue(true)
-                val list = getPopularMoviesUseCase.execute()
+                val list = getMoviesUseCase.execute(true)
                 _movies.postValue(list)
                 _error.postValue(LoadState.SUCCESS)
             } catch (e: Exception) {
@@ -47,9 +61,17 @@ class PopularViewModel(
 
     }
 
+    private fun getFavoriteMovies() {
+        viewModelScope.launch {
+            val list = getMoviesUseCase.execute(false)
+            if (list != null)
+                _movies.postValue(list)
+        }
+    }
+
     fun addMovieToFavorite(movie: MovieCollectionItem) {
         viewModelScope.launch {
-            addMovieToFavoriteUseCase.execute(movie)
+            addMovieToDbUseCase.execute(movie)
             val updatedMovies = _movies.value?.map {
                 if (it.filmId == movie.filmId) {
                     it.copy(isFavorite = true)
@@ -65,12 +87,15 @@ class PopularViewModel(
         viewModelScope.launch {
             try {
                 _loadingState.postValue(true)
-                val list = searchMoviesUseCase.execute(word)
-                if (list?.isEmpty() == true)
+                val list = _mode.value?.let { searchMoviesUseCase.execute(word, it) }
+                if (list.isNullOrEmpty()) {
                     _error.postValue(LoadState.NONE)
-                else
+                    _movies.postValue(null)
+                }
+                else {
                     _error.postValue(LoadState.SUCCESS)
-                _movies.postValue(list)
+                    _movies.postValue(list)
+                }
             } catch (e: Exception) {
                 _movies.postValue(null)
                 _error.postValue(LoadState.NONE)

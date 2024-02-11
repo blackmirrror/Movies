@@ -1,8 +1,6 @@
 package ru.blackmirrror.movies.data
 
 import com.google.gson.annotations.SerializedName
-import ru.blackmirrror.movies.domain.models.Country
-import ru.blackmirrror.movies.domain.models.Genre
 import ru.blackmirrror.movies.domain.models.Movie
 
 data class MovieResponse (
@@ -79,8 +77,8 @@ data class CountryResponse (
 
 ) {
     companion object {
-        fun map(countryResponse: CountryResponse): Country {
-            return Country(countryResponse.country)
+        fun map(countryResponse: CountryResponse): String {
+            return countryResponse.country
         }
     }
 }
@@ -91,8 +89,8 @@ data class GenreResponse (
 
 ) {
     companion object {
-        fun map(genreResponse: GenreResponse): Genre {
-            return Genre(genreResponse.genre)
+        fun map(genreResponse: GenreResponse): String {
+            return genreResponse.genre
         }
     }
 }

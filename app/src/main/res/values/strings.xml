@@ -12,4 +12,5 @@
     <string name="item_description">Описание</string>
     <string name="item_genres">Жанры: один, два</string>
     <string name="item_countries">Страны: Россия, Россия</string>
+    <string name="title_favorite">Избранные</string>
 </resources>

@@ -1,4 +1,4 @@
-package ru.blackmirrror.movies.app.presentation.fragments.popular
+package ru.blackmirrror.movies.app.presentation.fragments.main
 
 import android.os.Bundle
 import android.text.Editable
@@ -11,12 +11,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.blackmirrror.movies.databinding.FragmentPopularBinding
+import ru.blackmirrror.movies.R
+import ru.blackmirrror.movies.databinding.FragmentMainBinding
 
-class PopularFragment : Fragment() {
+class MainFragment : Fragment() {
 
-    private lateinit var binding: FragmentPopularBinding
-    private val viewModel by viewModel<PopularViewModel>()
+    private lateinit var binding: FragmentMainBinding
+    private val viewModel by viewModel<MainViewModel>()
 
     private lateinit var moviesAdapter: MoviesAdapter
 
@@ -24,13 +25,14 @@ class PopularFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPopularBinding.inflate(inflater, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
 
         initRecycler()
         observeData()
         handleError()
         toggleToolbars()
         handleSearch()
+        initChangeModeButtons()
 
         return binding.root
     }
@@ -39,19 +41,20 @@ class PopularFragment : Fragment() {
         moviesAdapter = MoviesAdapter()
         binding.rvMovies.adapter = moviesAdapter
         moviesAdapter.onMovieItemLongClickListener = {
-            viewModel.addMovieToFavorite(it)
+            viewModel.addMovieToFavorite(it.copy(isFavorite = true))
         }
         moviesAdapter.onMovieItemClickListener = {
-            val action = PopularFragmentDirections.actionPopularFragmentToMovieFragment(it.filmId)
+            val action = MainFragmentDirections.actionPopularFragmentToMovieFragment(it.filmId)
             findNavController().navigate(action)
         }
     }
 
     private fun observeData() {
         viewModel.movies.observe(viewLifecycleOwner) {
-            if (it != null) {
+            if (it != null)
                 moviesAdapter.submitList(it)
-            }
+            else
+                moviesAdapter.submitList(arrayListOf())
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
@@ -77,11 +80,17 @@ class PopularFragment : Fragment() {
                 else -> View.GONE
             }
         }
+
+        viewModel.mode.observe(viewLifecycleOwner) {
+            if (it) loadPopular()
+            else loadFavorite()
+            viewModel.loadNeedMovies()
+        }
     }
 
     private fun handleError() {
         binding.layoutError.btnError.setOnClickListener {
-            viewModel.getPopularMovies()
+            viewModel.loadNeedMovies()
         }
     }
 
@@ -97,7 +106,8 @@ class PopularFragment : Fragment() {
         binding.toolbarSearch.ivToolbarSearch.setOnClickListener{
             TransitionManager.beginDelayedTransition(binding.toolbarContainer, transition)
             closeEditToolbar()
-            viewModel.getPopularMovies()
+            binding.noneLayoutContainer.visibility = View.GONE
+            viewModel.loadNeedMovies()
         }
     }
 
@@ -116,7 +126,8 @@ class PopularFragment : Fragment() {
 
         binding.layoutNone.btnNone.setOnClickListener {
             closeEditToolbar()
-            viewModel.getPopularMovies()
+            binding.noneLayoutContainer.visibility = View.GONE
+            viewModel.loadNeedMovies()
         }
     }
 
@@ -124,5 +135,25 @@ class PopularFragment : Fragment() {
         binding.toolbarTitle.root.visibility = View.VISIBLE
         binding.toolbarSearch.root.visibility = View.GONE
         binding.toolbarSearch.etToolbarSearch.text = null
+    }
+
+    private fun initChangeModeButtons() {
+        binding.btnPopular.setOnClickListener {
+            viewModel.changeMode(true)
+            closeEditToolbar()
+        }
+        binding.btnFavorite.setOnClickListener {
+            viewModel.changeMode(false)
+            closeEditToolbar()
+        }
+    }
+
+    private fun loadPopular() {
+        binding.toolbarTitle.tvToolbarTitle.text =
+            getString(R.string.title_popular)
+    }
+
+    private fun loadFavorite() {
+        binding.toolbarTitle.tvToolbarTitle.text = getString(R.string.title_favorite)
     }
 }

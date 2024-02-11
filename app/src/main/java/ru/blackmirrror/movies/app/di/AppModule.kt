@@ -3,15 +3,15 @@ package ru.blackmirrror.movies.app.di
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.blackmirrror.movies.app.presentation.fragments.movie.MovieViewModel
-import ru.blackmirrror.movies.app.presentation.fragments.popular.PopularViewModel
+import ru.blackmirrror.movies.app.presentation.fragments.main.MainViewModel
 
 val appModule = module {
 
     viewModel {
-        PopularViewModel(
-            getPopularMoviesUseCase = get(),
-            addMovieToFavoriteUseCase = get(),
-            searchMoviesUseCase = get()
+        MainViewModel(
+            addMovieToDbUseCase = get(),
+            searchMoviesUseCase = get(),
+            getMoviesUseCase = get()
         )
     }
 

@@ -48,16 +48,16 @@ class MovieFragment : Fragment() {
     }
 
     private fun observeMovie() {
-        viewModel.movie.observe(viewLifecycleOwner) {
+        viewModel.movie.observe(viewLifecycleOwner) { movie ->
             with(binding) {
-                tvMovieTitle.text = it?.nameRu
-                tvMovieDescription.text = it?.description
-                tvMovieGenres.text = it?.genres?.map { it.genre }
+                tvMovieTitle.text = movie?.nameRu
+                tvMovieDescription.text = movie?.description
+                tvMovieGenres.text = movie?.genres?.map { it }
                     ?.let { it1 -> TextFormatter.formatGenres(it1) }
-                tvMovieCountries.text = it?.countries?.map { it.country }
+                tvMovieCountries.text = movie?.countries?.map { it }
                     ?.let { it1 -> TextFormatter.formatCountries(it1) }
             }
-            it?.posterUrl?.let { it1 -> loadImage(binding.ivMovieImage, it1) }
+            movie?.posterUrl?.let { it1 -> loadImage(binding.ivMovieImage, it1) }
         }
 
         viewModel.error.observe(viewLifecycleOwner) {

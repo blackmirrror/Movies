@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/popularFragment"
-        android:name="ru.blackmirrror.movies.app.presentation.fragments.popular.PopularFragment"
+        android:name="ru.blackmirrror.movies.app.presentation.fragments.main.MainFragment"
         android:label="fragment_popular"
-        tools:layout="@layout/fragment_popular" >
+        tools:layout="@layout/fragment_main" >
         <action
             android:id="@+id/action_popularFragment_to_movieFragment"
             app:destination="@id/movieFragment" />

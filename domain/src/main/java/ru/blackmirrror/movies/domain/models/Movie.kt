@@ -11,19 +11,7 @@ data class Movie (
     var slogan                     : String?              = null,
     var description                : String?              = null,
     var shortDescription           : String?              = null,
-    var countries                  : List<Country> = arrayListOf(),
-    var genres                     : List<Genre>    = arrayListOf()
-
-)
-
-data class Country (
-
-    var country : String
-
-)
-
-data class Genre (
-
-    var genre : String
+    var countries                  : List<String> = arrayListOf(),
+    var genres                     : List<String>    = arrayListOf()
 
 )

@@ -16,11 +16,11 @@ interface ApiService {
     @GET("films/top")
     suspend fun getPopularMovies(
         @Query("type") type: String,
-        @Query("page") page: Int
+        //@Query("page") page: Int
     ): Response<MoviesCollectionResponse>
 
-    @GET("films")
-    suspend fun getMoviesByKeyword(
-        @Query("keyword") keyword: String
-    ): Response<MoviesSearchResponse>
+//    @GET("films")
+//    suspend fun getMoviesByKeyword(
+//        @Query("keyword") keyword: String
+//    ): Response<MoviesSearchResponse>
 }

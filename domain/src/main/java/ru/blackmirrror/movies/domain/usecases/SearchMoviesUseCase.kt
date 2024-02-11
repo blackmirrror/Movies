@@ -5,7 +5,7 @@ import ru.blackmirrror.movies.domain.repositories.MoviesRepository
 
 class SearchMoviesUseCase(private val repository: MoviesRepository) {
 
-    suspend fun execute(word: String): List<MovieCollectionItem>? {
-        return repository.searchMoviesByWord(word)?.items
+    suspend fun execute(word: String, isRemote: Boolean): List<MovieCollectionItem>? {
+        return repository.searchMoviesByWord(word, isRemote)
     }
 }

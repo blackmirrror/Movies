@@ -19,8 +19,8 @@ data class MovieCollectionItem (
     var nameRu           : String?              = null,
     var nameEn           : String?              = null,
     var year             : String?              = null,
-    var countries        : List<Country> = arrayListOf(),
-    var genres           : List<Genre>    = arrayListOf(),
+    var countries        : List<String> = arrayListOf(),
+    var genres           : List<String>    = arrayListOf(),
     var posterUrl        : String?              = null,
     var posterUrlPreview : String?              = null,
     var isFavorite       : Boolean?             = false
