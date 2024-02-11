@@ -45,6 +45,11 @@ class MoviesAdapter :
             title.text = movie.nameRu
             genreAndYear.text = TextFormatter.formatGenreAndYear(movie.genres.first().genre, movie.year)
 
+            if (movie.isFavorite == true)
+                isFavorite.visibility = View.VISIBLE
+            else
+                isFavorite.visibility = View.GONE
+
             item.setOnLongClickListener {
                 onMovieItemLongClickListener?.invoke(movie)
                 true

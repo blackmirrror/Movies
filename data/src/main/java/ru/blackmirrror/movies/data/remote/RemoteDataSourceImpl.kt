@@ -1,4 +1,4 @@
-package ru.blackmirrror.movies.data.sources
+package ru.blackmirrror.movies.data.remote
 
 import retrofit2.Response
 import ru.blackmirrror.movies.data.api.ApiService

@@ -18,12 +18,12 @@ data class Movie (
 
 data class Country (
 
-    var country : String? = null
+    var country : String
 
 )
 
 data class Genre (
 
-    var genre : String? = null
+    var genre : String
 
 )

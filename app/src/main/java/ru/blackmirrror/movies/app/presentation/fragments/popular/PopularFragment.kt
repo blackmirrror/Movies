@@ -32,7 +32,7 @@ class PopularFragment : Fragment() {
         moviesAdapter = MoviesAdapter()
         binding.rvMovies.adapter = moviesAdapter
         moviesAdapter.onMovieItemLongClickListener = {
-
+            viewModel.addMovieToFavorite(it)
         }
         moviesAdapter.onMovieItemClickListener = {
             val action = PopularFragmentDirections.actionPopularFragmentToMovieFragment(it.filmId)

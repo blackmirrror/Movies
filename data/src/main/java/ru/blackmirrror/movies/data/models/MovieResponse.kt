@@ -75,7 +75,7 @@ data class MovieResponse (
 
 data class CountryResponse (
 
-    @SerializedName("country" ) var country : String? = null
+    @SerializedName("country" ) var country : String
 
 ) {
     companion object {
@@ -87,7 +87,7 @@ data class CountryResponse (
 
 data class GenreResponse (
 
-    @SerializedName("genre" ) var genre : String? = null
+    @SerializedName("genre" ) var genre : String
 
 ) {
     companion object {

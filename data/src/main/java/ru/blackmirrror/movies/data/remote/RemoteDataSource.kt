@@ -1,4 +1,4 @@
-package ru.blackmirrror.movies.data.sources
+package ru.blackmirrror.movies.data.remote
 
 import ru.blackmirrror.movies.data.api.NetworkState
 import ru.blackmirrror.movies.data.models.MoviesCollectionResponse
