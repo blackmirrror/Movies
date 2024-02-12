@@ -4,6 +4,7 @@ import org.koin.dsl.module
 import ru.blackmirrror.movies.domain.usecases.AddMovieToDbUseCase
 import ru.blackmirrror.movies.domain.usecases.GetMoviesUseCase
 import ru.blackmirrror.movies.domain.usecases.GetMovieUseCase
+import ru.blackmirrror.movies.domain.usecases.RemoveCacheMoviesUseCase
 import ru.blackmirrror.movies.domain.usecases.SearchMoviesUseCase
 
 val domainModule = module {
@@ -21,5 +22,9 @@ val domainModule = module {
 
     factory {
         GetMoviesUseCase(repository = get())
+    }
+
+    factory {
+        RemoveCacheMoviesUseCase(repository = get())
     }
 }

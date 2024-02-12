@@ -21,6 +21,6 @@ interface GenreDao {
     @Delete
     suspend fun deleteGenre(genre: GenreEntity): Int
 
-    @Query("DELETE FROM genres WHERE id = :genreId")
-    suspend fun deleteGenreById(genreId: Int): Int
+    @Query("DELETE FROM genres WHERE movieId = :movieId")
+    suspend fun deleteGenreById(movieId: Int): Int
 }

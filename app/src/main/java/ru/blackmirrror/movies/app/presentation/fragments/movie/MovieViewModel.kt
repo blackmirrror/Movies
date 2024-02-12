@@ -28,7 +28,6 @@ class MovieViewModel(private val getMovieUseCase: GetMovieUseCase): ViewModel() 
                     _error.postValue(true)
                 }
             }
-            _movie.postValue(getMovieUseCase.execute(id))
         }
     }
 }

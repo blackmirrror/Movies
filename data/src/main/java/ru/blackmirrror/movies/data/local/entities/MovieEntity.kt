@@ -21,7 +21,7 @@ data class MovieEntity(
             filmId,
             nameRu,
             nameEn,
-            year,
+            year?.toInt(),
             posterUrl = posterUrl,
             posterUrlPreview =  posterUrlPreview,
             isFavorite = isFavorite
@@ -34,7 +34,7 @@ data class MovieEntity(
                 movieCollectionItem.filmId,
                 movieCollectionItem.nameRu,
                 movieCollectionItem.nameEn,
-                movieCollectionItem.year,
+                movieCollectionItem.year.toString(),
                 movieCollectionItem.posterUrl,
                 movieCollectionItem.posterUrlPreview,
                 movieCollectionItem.isFavorite

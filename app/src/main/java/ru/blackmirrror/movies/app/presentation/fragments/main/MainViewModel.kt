@@ -1,19 +1,23 @@
 package ru.blackmirrror.movies.app.presentation.fragments.main
 
+import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.blackmirrror.movies.app.presentation.services.CleanupService
 import ru.blackmirrror.movies.domain.models.MovieCollectionItem
 import ru.blackmirrror.movies.domain.usecases.AddMovieToDbUseCase
 import ru.blackmirrror.movies.domain.usecases.GetMoviesUseCase
+import ru.blackmirrror.movies.domain.usecases.RemoveCacheMoviesUseCase
 import ru.blackmirrror.movies.domain.usecases.SearchMoviesUseCase
 
 class MainViewModel(
     private val getMoviesUseCase: GetMoviesUseCase,
     private val addMovieToDbUseCase: AddMovieToDbUseCase,
-    private val searchMoviesUseCase: SearchMoviesUseCase
+    private val searchMoviesUseCase: SearchMoviesUseCase,
+    private val removeCacheMoviesUseCase: RemoveCacheMoviesUseCase
 ) : ViewModel() {
 
     private val _mode = MutableLiveData<Boolean>()
@@ -30,7 +34,7 @@ class MainViewModel(
 
     init {
         _mode.postValue(true)
-        getPopularMovies()
+        getPopularMovies(true)
     }
 
     fun changeMode(newMode: Boolean) {
@@ -39,16 +43,16 @@ class MainViewModel(
 
     fun loadNeedMovies() {
         if (_mode.value == true)
-            getPopularMovies()
+            getPopularMovies(false)
         else
             getFavoriteMovies()
     }
 
-    private fun getPopularMovies() {
+    private fun getPopularMovies(isFirstLoad: Boolean) {
         viewModelScope.launch {
             try {
                 _loadingState.postValue(true)
-                val list = getMoviesUseCase.execute(true)
+                val list = getMoviesUseCase.execute(true, isFirstLoad)
                 _movies.postValue(list)
                 _error.postValue(LoadState.SUCCESS)
             } catch (e: Exception) {
@@ -63,7 +67,7 @@ class MainViewModel(
 
     private fun getFavoriteMovies() {
         viewModelScope.launch {
-            val list = getMoviesUseCase.execute(false)
+            val list = getMoviesUseCase.execute(false, false)
             if (list != null)
                 _movies.postValue(list)
         }

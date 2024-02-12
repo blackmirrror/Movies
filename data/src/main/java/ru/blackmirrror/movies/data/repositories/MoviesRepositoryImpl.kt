@@ -1,5 +1,6 @@
 package ru.blackmirrror.movies.data.repositories
 
+import android.util.Log
 import ru.blackmirrror.movies.data.MovieResponse
 import ru.blackmirrror.movies.data.api.NetworkState
 import ru.blackmirrror.movies.data.local.MoviesDb
@@ -10,7 +11,6 @@ import ru.blackmirrror.movies.data.models.MoviesCollectionResponse
 import ru.blackmirrror.movies.data.remote.RemoteDataSource
 import ru.blackmirrror.movies.domain.models.Movie
 import ru.blackmirrror.movies.domain.models.MovieCollectionItem
-import ru.blackmirrror.movies.domain.models.MoviesCollection
 import ru.blackmirrror.movies.domain.repositories.MoviesRepository
 
 class MoviesRepositoryImpl(
@@ -25,11 +25,21 @@ class MoviesRepositoryImpl(
     override suspend fun getMovie(id: Int): Movie? {
         return when (val response = remoteDataSource.getMovie(id)) {
             is NetworkState.Success -> MovieResponse.map(response.data)
-            is NetworkState.Error -> null
+            is NetworkState.Error -> getMovieLocal(id)
         }
     }
 
-    private suspend fun getPopularMovies(): MoviesCollection? {
+    private suspend fun getMovieLocal(id: Int): Movie? {
+        val movie = movieDao.getMovieById(id)?.fromEntityToMovieCollectionItem()
+        Log.d("ff", "getMovieLocal: $movie")
+        if (movie != null) {
+            movie.countries = countryDao.getAllCountries(id).map { it.countryName }
+            movie.genres = genreDao.getAllGenres(id).map { it.genreName }
+        }
+        return movie?.let { MovieCollectionItem.toMovie(it) }
+    }
+
+    private suspend fun getPopularMovies(): List<MovieCollectionItem>? {
         return when (val response = remoteDataSource.getPopularMovies()) {
             is NetworkState.Success -> {
                 val movies = MoviesCollectionResponse.map(response.data)
@@ -38,26 +48,28 @@ class MoviesRepositoryImpl(
                     movie.isFavorite = movie.filmId in existingMovieIds
                     addMovieToDb(movie)
                 }
-                movies
+                movies.films
             }
 
             is NetworkState.Error -> null
         }
     }
 
-    override suspend fun getMovies(isRemote: Boolean): List<MovieCollectionItem>? {
-        val movies = if (isRemote) {
+    override suspend fun getMovies(isRemote: Boolean, isFirstLoad: Boolean): List<MovieCollectionItem>? {
+        val movies = if (isFirstLoad) {
+            getPopularMovies()
+        } else if (isRemote) {
             movieDao.getAllMovies().map { it.fromEntityToMovieCollectionItem() }
         } else {
             movieDao.getMovies(isFavorite = !isRemote)
                 .map { it.fromEntityToMovieCollectionItem() }
         }
-        for (movie in movies) {
-            movie.genres = genreDao.getAllGenres(movie.filmId).map { it.genreName }
-            movie.countries = countryDao.getAllCountries(movie.filmId).map { it.countryName }
+        if (movies != null) {
+            for (movie in movies) {
+                movie.genres = genreDao.getAllGenres(movie.filmId).map { it.genreName }
+                movie.countries = countryDao.getAllCountries(movie.filmId).map { it.countryName }
+            }
         }
-        if (movies.isEmpty())
-            return getPopularMovies()?.films
         return movies
     }
 
@@ -80,5 +92,15 @@ class MoviesRepositoryImpl(
         if (movies.isEmpty())
             return null
         return movies
+    }
+
+    override suspend fun removeCacheMovies() {
+        val cacheIds = movieDao.getAllMovieIds(false)
+        for (ci in cacheIds) {
+            genreDao.deleteGenreById(ci)
+            countryDao.deleteCountryById(ci)
+        }
+        movieDao.deleteCacheMovies(false)
+        Log.d("ff", "removeCacheMovies: ${movieDao.getAllMovies()}")
     }
 }

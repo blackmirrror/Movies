@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -62,6 +63,8 @@ class MainFragment : Fragment() {
 
             binding.failLayoutContainer.visibility = failVisibility
             binding.noneLayoutContainer.visibility = noneVisibility
+            if (it == LoadState.FAIL)
+                Toast.makeText(requireContext(), "Проблемы с подключением, загружаю кэшированные данные", Toast.LENGTH_SHORT).show()
         }
 
         viewModel.loadingState.observe(viewLifecycleOwner) {

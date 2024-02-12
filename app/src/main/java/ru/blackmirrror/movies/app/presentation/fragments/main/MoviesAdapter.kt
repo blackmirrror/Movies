@@ -43,7 +43,7 @@ class MoviesAdapter :
         val movie = getItem(position)
         with(holder) {
             title.text = movie.nameRu
-            genreAndYear.text = TextFormatter.formatGenreAndYear(movie.genres.first(), movie.year)
+            genreAndYear.text = TextFormatter.formatGenreAndYear(movie.genres.first(), movie.year.toString())
 
             if (movie.isFavorite == true)
                 isFavorite.visibility = View.VISIBLE

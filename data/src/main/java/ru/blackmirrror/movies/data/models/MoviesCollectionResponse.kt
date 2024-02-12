@@ -63,7 +63,7 @@ data class MovieCollectionItemResponse (
                 movieCollectionItemResponse.filmId,
                         movieCollectionItemResponse.nameRu,
                         movieCollectionItemResponse.nameEn,
-                        movieCollectionItemResponse.year,
+                        movieCollectionItemResponse.year?.toInt(),
                         movieCollectionItemResponse.countries.map { CountryResponse.map(it) },
                         movieCollectionItemResponse.genres.map { GenreResponse.map(it) },
                         movieCollectionItemResponse.posterUrl,
